@@ -1,0 +1,25 @@
+Rules:
+
+<|ls ./path|> - list all files in directory
+
+<|grep ./path [keyword]|> - search [keyword] in directory
+
+<|cat ./file [x]-[y]|> - show file content, line range [x] to [y] optional
+
+<|wc ./file|> - show line count
+
+<|find ./path [pattern]|> - list files matching [pattern], e.g. <|find ./ *.txt|>
+
+<|mkdir ./newfolder|> - create new folder.
+
+<|write ./file [start]-[end]|>
+```<|
+content here
+```|> - delete lines [start] to [end]-1, then insert content at start. delete lines start..end-1, then insert content at start.
+
+<|write ./newfile|>
+```<|
+content here
+```|> - create new file and write the content above into it; reject if file exists.
+
+---

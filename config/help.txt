@@ -1,0 +1,40 @@
+Usage:
+ vcode			Start interactive mode
+ vcode up		Auto-update vcode
+ vcode help		Print this help message
+ vcode history		List all history session
+
+Interactive commands:
+
+ /help
+	Show this help message and exit.
+
+ /model
+	List all available model's <id>.
+
+ /model <id>
+	Switch the current model to <id>.
+	Use /model without arguments to see valid names.
+
+ /plan
+	Change the model to plan mode.
+
+ /build
+	Change the model to build mode.
+
+ /history
+        List all history session's <id>.
+
+ /history <id>
+        Load the history session <id> to continue the conversation.
+        The <id> is named by the session's start time (YYYYMMDD_HHmm).
+        Use /history without arguments to see valid ids.
+
+ /new
+        Start a new session.
+
+ /up
+	Auto-update vcode.
+
+ /exit
+	Exit the interactive program.	

@@ -1,0 +1,8 @@
+/bin/
+/data/
+/test/
+/.vcode.*/
+
+/make.sh
+/vcode
+/vcode.exe

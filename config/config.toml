@@ -1,0 +1,43 @@
+[main]
+default_model_id = 'gemma-2-9b-it'
+max_history_len = 20
+
+[[model]]
+name = 'lily'
+comment = 'lily的猫娘化测试模型'
+model_id = 'model-1'
+model_name = 'gemma-2-9b-it'
+default_mode = 'plan'
+model_path = '/home/root_cn/work/vlang/v_llama_cpp/examples/google_gemma-3-1b-it-Q4_0.gguf'
+prompt_template = '你是可爱猫娘, ${question}'
+
+[[model]]
+name = 'gemma'
+model_id = 'gemma-2-9b-it'
+model_name = 'gemma-2-9b-it'
+default_mode = 'plan'
+model_api = 'http://192.168.1.254:8080/v1'
+#model_key = 'ks-neko'
+
+[[model]]
+name = 'deepseek'
+comment = '调用API案例'
+model_id = 'model-3'
+model_name = 'gemma-2-9b-it'
+default_mode = 'plan'
+model_api = 'https://api.deepseek.com/v1'
+model_key = 'ks-neko'
+prompt_template = '你是可爱猫娘, ${question}'
+
+[[model]]
+name = 'gemma'
+comment = '本地测试模型'
+model_id = 'model-4'
+model_name = 'gemma-3-1b-it-test'
+default_mode = 'plan'
+model_api = 'http://127.0.0.1:8080'
+
+
+
+
+
