@@ -51,7 +51,7 @@ pub fn load_history_file(history string, history_id string) !string {
 fn find_max_history_len(config string) int {
         toml_doc := load_config(config)
         doc := toml.parse_text(toml_doc) or { panic(err) }
-        max_history_len := to_load(doc.value('main.max_history_len'))
+        max_history_len := doc.value('main.max_history_len')
 	return max_history_len.int()
 }
 

@@ -2,7 +2,7 @@
 
 [中文](./README_CN.md)|English
 
-General-purpose Agent CLIs (such as opencode) are fully featured, but their tool protocols are complex and their system prompts are lengthy. Usually, only flagship models can drive them reliably, and the token overhead per conversation round is also considerable. vcode compresses the interaction protocol to a minimum: the model obtains context on demand through plain-text commands such as `<|ls|>`, `<|grep|>`, and `<|cat|>`, and the complete rules occupy only a dozen or so lines of prompt text. **Even 7B-level quantized small models can use it stably.**
+General-purpose Agent CLIs (such as opencode) are fully featured, but their tool protocols are complex and their system prompts are lengthy. Usually, only flagship models can drive them reliably, and the token overhead per conversation round is also considerable. vcode compresses the interaction protocol to a minimum: the model obtains context on demand through plain-text commands such as `<|ls|>`, `<|grep|>`, and `<|cat|>`, and the complete rules occupy only a dozen or so lines of prompt text. **Even quantized small models can use it stably.**
 
 - **Retrieve context on demand**: fetch only the needed directory listings and line counts; do not stuff in a directory tree, and do not read entire files
 - **Minimal prompts**: all rules fit in a dozen or so lines of prompt text, so even small models can output correctly
@@ -20,7 +20,7 @@ Go to the [**Releases**](https://github.com/cryingn/vcode/releases/release) page
 Only if you need to modify the code, or if the official Release does not include a binary for your platform:
 
 ```sh
-git clone https://github.com/cryingn/vcode
+git clone https://github.com/cryingn/vcode.git
 cd vcode
 v vcode.v
 ```
@@ -50,20 +50,16 @@ Start:
 vcode
 ```
 
-After entering the interactive session, simply state your request, for example:
-
-```
-Help me see what files are under src/, and summarize what the first 40 lines of main.v do
-```
-
-The model will organize `<|ls|>` and `<|cat|>` commands on its own and retrieve only the needed content, instead of stuffing the entire project into the context.
-
-## Two Modes
+## Modes
 
 | Mode | What the model can do | Suitable scenarios |
 |------|--------------|----------|
 | **plan** (default) | Read-only: `ls` / `grep` / `cat` / `wc` / `find` | Reading code, understanding a project, producing plans; safe and controllable |
 | **build** | Additionally writable: `mkdir` / `write` | Actually modifying code after confirming a plan (Warning: rollback functionality is not currently supported; back up before using build) |
+
+## System Interaction
+
+In addition to interacting with the model through interactive commands, when you enter system commands (such as ls, cd .., etc.) in the conversation, vcode will execute them directly in the local shell and display the output, without sending them to the model.
 
 ## Interactive Commands
 
@@ -87,7 +83,6 @@ Direct command-line invocation: `vcode up` (update), `vcode help`, `vcode histor
 - **Quickly exploring code in SSH / containers**: no Node, no Python; run a single binary directly
 - **Offline intranet**: connect to local Ollama / llama.cpp models; private code never leaves the intranet
 - **Low-spec machines + small models**: everyday code reading and Q&A with zero token cost
-- **Reconnaissance before action**: use plan mode to let the model produce a plan, then switch to build to modify code after confirmation
 
 ## Feedback
 
