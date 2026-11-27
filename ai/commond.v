@@ -25,11 +25,68 @@ fn ls_commond(args []string) !string {
 	mut lines := []string{}
 	for entry in entries {
 		full := os.join_path(path, entry)
-		kind := if os.is_dir(full) { ' [DIR]' } else { ' [FILE]' }
-		lines << '${kind} ${entry}'
+		if os.is_dir(full) {
+			lines << ' [DIR] ${entry}'
+			continue
+		}
+		if !os.is_file(full) {
+			lines << ' [FILE] ${entry}'
+			continue
+		}
+		data := os.read_bytes(full) or {
+			lines << ' [FILE] ${entry}\n(unreadable)'
+			continue
+		}
+		size := data.len
+		if is_binary_content(data) {
+			lines << ' [BIN] ${entry}\nsize: ${size}'
+			continue
+		}
+		line_count := wc_file(full) or {
+			lines << ' [FILE] ${entry}\n(unreadable)'
+			continue
+		}
+		lines << ' [FILE] ${entry}\nsize: ${size} lines: ${line_count}'
 	}
 	return '<|ls ${path}|>\n' + lines.join('\n')
 }
+
+// bin check.
+fn is_binary_content(data []u8) bool {
+    if data.len == 0 { return false }
+
+    // 常见二进制魔数（与 file 命令原理类似）
+    if data.len >= 4 {
+        if data[0] == 0x7f && data[1] == 0x45 && data[2] == 0x4c && data[3] == 0x46 {
+            return true // ELF
+        }
+    }
+    if data.len >= 2 && data[0] == 0x4d && data[1] == 0x5a {
+        return true // PE (MZ)
+    }
+    if data.len >= 4 && data[0] == 0x89 && data[1] == 0x50 && data[2] == 0x4e && data[3] == 0x47 {
+        return true // PNG
+    }
+    if data.len >= 3 && data[0] == 0xff && data[1] == 0xd8 && data[2] == 0xff {
+        return true // JPEG
+    }
+    if data.len >= 4 && data[0] == 0x50 && data[1] == 0x4b && data[2] == 0x03 && data[3] == 0x04 {
+        return true // ZIP
+    }
+
+    // 回退：采样前 4096 字节，不可打印比例 > 30% 判为二进制
+    sample_len := if data.len < 4096 { data.len } else { 4096 }
+    mut non_text := 0
+    for i in 0 .. sample_len {
+        b := data[i]
+        // 允许 \t(9) \n(10) \r(13) 以及可打印 ASCII 32~126
+        if !(b == 9 || b == 10 || b == 13 || (b >= 32 && b <= 126)) {
+            non_text++
+        }
+    }
+    return f64(non_text) / f64(sample_len) > 0.3
+}
+
 
 // grep ./path "keyword"
 fn grep_commond(args []string) !string {
@@ -100,9 +157,14 @@ fn wc_commond(args []string) !string {
 		return error('Error: missing file path.')
 	}
 	path := args[0]
+	line_count := wc_file(path)!
+	return  '<|wc ${path}|>\n$line: ${line_count}'
+}
+
+fn wc_file(path string) !int {
 	content := os.read_file(path) or { return error('Error: file "${path}" does not read.') }
 	line_count := content.split_into_lines().len
-	return  '<|wc ${path}|>\n${line_count} ${path}'
+	return line_count
 }
 
 // find ./ pattern

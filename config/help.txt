@@ -3,6 +3,7 @@ Usage:
  vcode up		Auto-update vcode
  vcode help		Print this help message
  vcode history		List all history session
+ vcode print <id>	Print history session <id>
 
 Interactive commands:
 
@@ -29,6 +30,9 @@ Interactive commands:
         Load the history session <id> to continue the conversation.
         The <id> is named by the session's start time (YYYYMMDD_HHmm).
         Use /history without arguments to see valid ids.
+
+ /print <id>
+	Print the history session <id>.
 
  /new
         Start a new session.

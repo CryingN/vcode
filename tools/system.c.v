@@ -1,6 +1,9 @@
 module tools
 
+$if windows {
+} $else {
 import os
+}
 
 fn C.system(cmd &char) int
 

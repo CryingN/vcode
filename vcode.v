@@ -6,7 +6,7 @@ import ai
 import tools
 import readline { Readline }
 
-const version = 'v0.1.1'
+const version = 'v0.1.2'
 
 fn shorten_path(path string) string {
 	home := os.home_dir()
@@ -59,6 +59,12 @@ fn main() {
 				file_path
 			}
 			continue
+		} else if data.starts_with('/print ') {
+			history_id := data['/history '.len..]
+			shell.print_history_file(history, history_id) or {
+				println('Error: Not found history file: ${history_id}.jsonl .')
+			}
+			continue
 		} else if data == '/up' {
 			shell.up()
 			continue
@@ -108,6 +114,13 @@ fn main() {
 
 fn check_args(version string, config string, history string) bool {
 	args := os.args
+	if args.len > 2 {
+		if args[1] == 'print' {
+			history_id := args[2].trim_space()
+			shell.print_history_file(history, history_id) or { println('Error: Not found history file: ${history_id}.jsonl .') }
+			return true
+		}
+	}
 	if args.len > 1 {
 		if args[1] == 'up' {
 			shell.up()
@@ -117,6 +130,7 @@ fn check_args(version string, config string, history string) bool {
 			return true
 		} else if args[1] == 'history' {
 			shell.print_history_names(history, config) or { println('vcode.v main(): Not found model names.') }
+			return true
 		}
 	}
 	return false

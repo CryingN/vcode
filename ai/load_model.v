@@ -197,7 +197,7 @@ pub fn load_history(file_path string) []ChatMessage {
 			continue
 		}
 		saved := json2.decode[SaveMessage](trimmed) or { continue }
-		if saved.message_type in ['question', 'read', 'answer'] {
+		if saved.message_type in tools.effect_type {
 			result << saved.chat_message
 		}
 	}

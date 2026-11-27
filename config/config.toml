@@ -1,6 +1,6 @@
 [main]
 default_model_id = 'gemma-2-9b-it'
-max_history_len = 20
+max_history_len = 50
 
 [[model]]
 name = 'lily'

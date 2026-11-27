@@ -33,7 +33,7 @@ pub fn execute(answer string, default_mode string) !string {
 					return write_commond(args, lines, i) or { err.str() }
 				}
 			}
-			else { return error('ai/execute.v execute(): Unexpected commond.') }
+			else { continue }
 		}
 	}
 	return error('ai/execute.v execute(): Unexpected commond.')
